@@ -21,8 +21,8 @@ func (u *User) Create(newUser *types.User) error {
 func (u *User) Delete(newUser *types.User) error {
 	return u.repo.Delete(newUser.Name)
 }
-func (u *User) Update(beforeUser *types.User, afterUser *types.User) error {
-	return u.repo.Update(beforeUser, afterUser)
+func (u *User) Update(name string, age int64) error {
+	return u.repo.Update(name, age)
 }
 func (u *User) Get() []*types.User {
 	return u.repo.Get()

@@ -36,9 +36,24 @@ func (repo *UserRepository) Delete(userName string) error {
 	}
 	return nil
 }
-func (repo *UserRepository) Update(beforeUser *types.User, afterUser *types.User) error {
+func (repo *UserRepository) Update(name string, newAge int64) error {
+	isExist := false
+	for _, user := range repo.userMap {
+		// 포인트 타입에 대한 슬라이스, 특정값을 바꾸기 위해서는 포인트타입을 사용해야함
+		if user.Name == name {
+			user.Age = newAge
+			isExist = true
+			continue
+		}
+		if !isExist {
+			return errors.Errorf(errors.NotFoundUser, nil)
+		} else {
+			return nil
+		}
+	}
 	return nil
 }
+
 func (repo *UserRepository) Get() []*types.User {
 	return repo.userMap
 }

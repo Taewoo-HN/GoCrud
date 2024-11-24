@@ -58,12 +58,22 @@ func (u *userRouter) get(g *gin.Context) {
 	})
 }
 func (u *userRouter) update(g *gin.Context) {
-	//var req types.UpdateUserRequest
-	fmt.Println("User Router Update")
-	u.userService.Update(nil, nil)
-	u.router.okResponse(g, &types.UpdateUserResponse{
-		ApiResponse: types.NewAPIResponse(1, "성공입니다.", nil),
-	})
+	var req types.UpdateUserRequest
+	if err := g.ShouldBindJSON(&req); err != nil {
+		u.router.failedResponse(g, types.UpdateUserResponse{
+			ApiResponse: types.NewAPIResponse(-1, "바인딩 에러", err.Error()),
+		})
+	} else if err = u.userService.Update(req.Name, req.Age); err != nil {
+		u.router.failedResponse(g, types.UpdateUserResponse{
+			ApiResponse: types.NewAPIResponse(-1, "Update 에러", err.Error()),
+		})
+
+	} else {
+		u.router.okResponse(g, &types.UpdateUserResponse{
+			ApiResponse: types.NewAPIResponse(1, "성공", nil),
+		})
+	}
+
 }
 func (u *userRouter) delete(g *gin.Context) {
 	var req types.DeleteUserRequest
@@ -80,7 +90,5 @@ func (u *userRouter) delete(g *gin.Context) {
 			ApiResponse: types.NewAPIResponse(1, "성공", nil),
 		})
 	}
-	u.router.okResponse(g, &types.DeleteUserResponse{
-		ApiResponse: types.NewAPIResponse(1, "성공입니다.", nil),
-	})
+
 }
