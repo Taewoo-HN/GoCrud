@@ -34,7 +34,6 @@ func (repo *UserRepository) Delete(userName string) error {
 	} else {
 		return nil
 	}
-	return nil
 }
 func (repo *UserRepository) Update(name string, newAge int64) error {
 	isExist := false
